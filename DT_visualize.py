@@ -218,14 +218,25 @@ with col_1_2:
          file_name='Dem_Trans_Data.csv',
          mime='text/csv',
      )
+data_country_tostyle = pd.DataFrame(data_country_todisplay)
 
-styled = data_country_todisplay[["country",
-                                 "CDR_start","CDR_end",
-                                 "pre_CDR","post_CDR",
-                                 "CBR_start","CBR_end",
-                                 "pre_CBR","post_CBR"
-                                 ]].style.hide_index()  \
-                        .format("{:.2f}", subset=["pre_CDR","post_CDR","pre_CBR","post_CBR"])
+data_country_tostyle = data_country_tostyle.rename(columns={"CDR_start": "CDR start",
+                                 "CDR_end": "CDR end",
+                                 "pre_CDR": "pre CDR",
+                                 "post_CDR": "post CDR",
+                                 "CBR_start": "CBR start",
+                                 "CBR_end": "CBR end",
+                                 "pre_CBR": "pre CBR",
+                                 "post_CBR": "post CBR"})
+
+styled = data_country_tostyle[["country",
+                                 "CDR start","CDR end",
+                                 "pre CDR","post CDR",
+                                 "CBR start","CBR end",
+                                 "pre CBR","post CBR"
+                                 ]] \
+                        .style.hide_index()  \
+                        .format("{:.2f}", subset=["pre CDR","post CDR","pre CBR","post CBR"])
 
 styled.set_table_styles([
     {'selector': 'th.col_heading', 'props': 'text-align: center;'},
