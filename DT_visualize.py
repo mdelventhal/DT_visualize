@@ -124,8 +124,22 @@ def plotter(datadf,selection,xlimits,ylimits,toggles):
 data = load_data("Dem_Trans_data.csv")
 
 data_country = pd.read_csv("DT_data_byCountry.csv")
+data_country.loc[(np.array(data_country.CBRchosenMod) == 2) |
+                 (np.array(data_country.CBRchosenMod) == 4) |
+                 (np.array(data_country.CBRchosenMod) == 5),["CBR_start","pre_CBR"]] = np.NaN
 
+data_country.loc[(np.array(data_country.CBRchosenMod) == 3) |
+                 (np.array(data_country.CBRchosenMod) == 4) |
+                 (np.array(data_country.CBRchosenMod) == 5),["CBR_end","post_CBR"]] = np.NaN
+data_country.loc[((np.array(data_country.CDRchosenMod) == 2) |
+                 (np.array(data_country.CDRchosenMod) == 4) |
+                 (np.array(data_country.CDRchosenMod) == 5)) &
+                 (np.array(data_country.CDR_augmented_indic) == 0),["CDR_start","pre_CDR"]] = np.NaN
 
+data_country.loc[((np.array(data_country.CDRchosenMod) == 2) |
+                 (np.array(data_country.CDRchosenMod) == 4) |
+                 (np.array(data_country.CDRchosenMod) == 5)) &
+                 (np.array(data_country.CDR_augmented_indic) == 0),["CDR_end","post_CDR"]] = np.NaN
 
 with st.sidebar:
     st.write('Variables to include')
@@ -236,7 +250,11 @@ styled = data_country_tostyle[["country",
                                  "pre CBR","post CBR"
                                  ]] \
                         .style.hide_index()  \
-                        .format("{:.2f}", subset=["pre CDR","post CDR","pre CBR","post CBR"])
+                        .format(precision=0,na_rep=" ",
+                                formatter={"pre CDR": "{:.2f}",
+                                           "post CDR": "{:.2f}",
+                                           "pre CBR": "{:.2f}",
+                                           "post CBR": "{:.2f}"})
 
 styled.set_table_styles([
     {'selector': 'th.col_heading', 'props': 'text-align: center;'},
