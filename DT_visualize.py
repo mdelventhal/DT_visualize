@@ -41,9 +41,9 @@ def plotter(datadf,selection,xlimits,ylimits,toggles):
     
     chart = alt.Chart(datadf.loc[selection])
     
-    xscaler = alt.Scale(domain=[xlimits[0],xlimits[1]],clamp=True)
+    xscaler = alt.Scale(domain=[xlimits[0],xlimits[1]],clamp=True,nice=False)
     
-    yscaler = alt.Scale(domain=[ylimits[0],ylimits[1]],clamp=True)
+    yscaler = alt.Scale(domain=[ylimits[0],ylimits[1]],clamp=True,nice=False)
     
     pointb = chart.mark_point(size=2).encode(
         x = alt.X('year',scale=xscaler,axis=alt.Axis(format="d")),
