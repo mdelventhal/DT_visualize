@@ -21,12 +21,20 @@ def convert_df(df):
     return df.to_csv(index=False).encode('utf-8')
 
 
-def countryselecter(datadf,countrylist):
+def countryselecter(datadf,countrylist,toggles=None):
     selection = np.ones((len(datadf),)) == 0
     
     for country in countrylist:
         selection |= np.array(datadf.country) == country
     
+    varlist = ["Crude_Death_Rate","Crude_Birth_Rate","modeled_Birth_Rate","modeled_Death_Rate"]
+    
+    if not toggles is None:
+        aux_select = np.ones((len(datadf),)) == 0    
+        for j in range(4):
+            if toggles[j]:
+                aux_select |= ~np.isnan( np.array(datadf[varlist[j]]) )
+        selection &= aux_select
     return selection
 
 def plotter(datadf,selection,xlimits,ylimits,toggles):
@@ -143,7 +151,7 @@ with contain1:
     st.write('### Demographic transition chart')
     countrylist = st.multiselect('Countries to plot',data_country['country'],'United Kingdom')
 
-select = countryselecter(data,countrylist)
+select = countryselecter(data,countrylist,toggles=[CDR_show,CBR_show,CDR_modeled_show,CBR_modeled_show])
 bycountry_select = countryselecter(data_country,countrylist)
 
 data_country_todisplay = pd.DataFrame(data_country.loc[bycountry_select])
@@ -264,5 +272,4 @@ with col_2_2:
          file_name='DT_summary_bycountry.csv',
          mime='text/csv',
      )
-
 
