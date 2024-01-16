@@ -250,7 +250,6 @@ styled = data_country_tostyle[["country",
                                  "pre CBR","post CBR"
                                  ]] \
                         .style \ 
-                        #.hide_index()  \
                         .format(precision=0,na_rep=" ",
                                 formatter={"pre CDR": "{:.2f}",
                                            "post CDR": "{:.2f}",
